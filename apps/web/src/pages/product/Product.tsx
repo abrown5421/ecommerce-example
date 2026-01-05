@@ -1,15 +1,44 @@
 import { motion } from 'framer-motion';
+import { useParams } from 'react-router-dom';
+import { useGetProductByIdQuery } from '../../app/store/api/productsApi';
+import Loader from '../../features/loader/Loader';
 
 const Product = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data: product, isLoading, error } = useGetProductByIdQuery(id!);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="h-screen bg-neutral minus-nav relative z-0 p-4"
+      className="h-screen bg-neutral minus-nav relative z-0 p-4 flex flex-col justify-center items-center"
     >
-      Product
+      {isLoading ? (
+        <Loader />
+      ) : error || !product ? (
+        <div className="text-center text-red-500 mt-10">
+          <h2 className="text-2xl font-semibold mb-2">Product Not Found</h2>
+          <p className="text-neutral-500">Sorry, we couldn’t find the product you are looking for.</p>
+        </div>
+      ) : (
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6 items-start mt-6">
+          <div className="flex justify-center">
+            <img
+              src={product.product_image}
+              alt={product.product_name}
+              className="rounded-lg shadow-lg object-contain"
+            />
+          </div>
+          <div className="flex flex-col space-y-4">
+            <h1 className="text-3xl font-bold text-neutral-900">{product.product_name}</h1>
+            <span className="text-sm text-neutral-500 uppercase tracking-wide">{product.product_category}</span>
+            <p className="text-neutral-700">{product.product_description}</p>
+            <span className="text-2xl font-semibold text-primary">${product.product_price.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };
