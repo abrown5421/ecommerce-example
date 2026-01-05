@@ -11,6 +11,7 @@ import Profile from "./pages/profile/Profile";
 import Modal from "./features/modal/Modal";
 import Footer from "./features/footer/Footer";
 import Loader from "./features/loader/Loader";
+import Product from "./pages/product/Product";
 const App: React.FC = () => {
   const location = useLocation();
   const { isLoading } = useGetCurrentUserQuery();
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />{" "}
           {/* new routes inserted here */}
+          <Route path="/product" element={<Product />} />
         </Routes>
       </AnimatePresence>
       <Alert />
