@@ -50,4 +50,9 @@ html, body {
 
 .minus-nav {
   height: calc(100vh - 56px);
+  overflow: scroll;
+}
+
+.sup-min-nav {
+  min-height: calc(100vh - 56px);
 }
