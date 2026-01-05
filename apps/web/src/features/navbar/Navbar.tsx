@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bars3Icon, ShoppingCartIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "../../app/store/hooks";
 import { openDrawer } from "../drawer/drawerSlice";
 import { motion } from "framer-motion";
@@ -72,14 +72,14 @@ const Navbar: React.FC = () => {
             </Link>
           </motion.div>
         )}
-
+            
         {isAuthenticated && user && (
           <div className="flex items-center ml-4">
             <div
               onClick={handleCartClick}
-              className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer overflow-hidden bg-primary text-primary-contrast text-sm font-semibold"
+              className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer overflow-hidden text-secondary text-sm font-semibold"
             >
-              <ShoppingCartIcon />
+              <ShoppingBagIcon />
             </div>
             <div
               onClick={handleClick}
