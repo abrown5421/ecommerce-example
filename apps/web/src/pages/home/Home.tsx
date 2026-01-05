@@ -101,48 +101,6 @@ const Home = () => {
               </div>
             ))}
           </div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
-          <div>oi</div>
           {totalPages > 1 && (
             <div className="flex mt-6 space-x-2">
               <button
