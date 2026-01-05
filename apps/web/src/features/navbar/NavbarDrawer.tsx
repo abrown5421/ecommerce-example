@@ -30,14 +30,6 @@ const NavbarDrawer: React.FC = () => {
       <Link onClick={closeOnClick} className={classString("/")} to="/">
         Home
       </Link>
-      <Link
-        onClick={closeOnClick}
-        className={classString()}
-        target="blank"
-        to="https://google.com"
-      >
-        Test
-      </Link>
 
       {/* new links inserted here */}
 

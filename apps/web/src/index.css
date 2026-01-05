@@ -15,19 +15,19 @@
 }
 
 @theme {
-  --color-primary: oklch(0.7724 0.172798 65.367);
+  --color-primary: oklch(0.5152 0.090469 185.7334);
   --color-primary-contrast: oklch(0.9846 0.0017 247.84);
-  --color-secondary: oklch(0.1296 0.0274 261.69);
+  --color-secondary: oklch(0.3056 0.0654 288.09);
   --color-secondary-contrast: oklch(0.9846 0.0017 247.84);
-  --color-accent: oklch(0.4747 0.135757 44.9806);
+  --color-accent: oklch(0.6706 0.2393 195.88);
   --color-accent-contrast: oklch(0.9846 0.0017 247.84);
   
-  --color-neutral: oklch(0.9846 0.0017 247.84);
-  --color-neutral-contrast: oklch(0.1296 0.0274 261.69);
-  --color-neutral2: oklch(0.9276 0.0058 264.53);
-  --color-neutral2-contrast: oklch(0.1296 0.0274 261.69);
-  --color-neutral3: oklch(0.7071 0.0224 261.75);
-  --color-neutral3-contrast: oklch(0.1296 0.0274 261.69);
+  --color-neutral: oklch(0.9363 0.0218 83.26);
+  --color-neutral-contrast: oklch(0.1529 0.0444 288.09);
+  --color-neutral2: oklch(0.8887 0.0218 0);
+  --color-neutral2-contrast: oklch(0.1529 0.0444 288.09);
+  --color-neutral3: oklch(0.7878 0.0218 0);
+  --color-neutral3-contrast: oklch(0.1529 0.0444 288.09);
   
   --font-primary: 'PrimaryFont', sans-serif;
   --font-secondary: 'SecondaryFont', sans-serif;
