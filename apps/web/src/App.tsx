@@ -33,7 +33,7 @@ const App: React.FC = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />{" "}
           {/* new routes inserted here */}
-          <Route path="/product" element={<Product />} />
+          <Route path="/product/:id" element={<Product />} />
         </Routes>
       </AnimatePresence>
       <Alert />
