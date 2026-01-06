@@ -1,14 +1,25 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetProductsQuery } from '../../app/store/api/productsApi';
+import { useGetCurrentUserQuery } from '../../app/store/api/authApi';
+import { useAppDispatch } from '../../app/store/hooks';
+import { openAlert } from '../../features/alert/alertSlice';
+import { useCart } from '../../hooks/useCart';
 import Loader from '../../features/loader/Loader';
+import { IProduct } from '../../types/product.types';
 
 const PRODUCTS_PER_PAGE = 20;
 
 const Home = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data: activeUser } = useGetCurrentUserQuery();
+  const { addToCart, isLoading: isAddingToCart } = useCart({ 
+    userId: activeUser?._id 
+  });
+  
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,10 +50,41 @@ const Home = () => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  
-  const handleAddToCart = () => {
-    navigate('/cart');
-  }
+
+  const handleAddToCart = async (e: React.MouseEvent, product: IProduct) => {
+    e.stopPropagation();
+    
+    if (!activeUser?._id) {
+      dispatch(openAlert({
+        open: true,
+        closeable: true,
+        severity: 'error',
+        message: 'Please login to add items to your cart',
+        anchor: { x: 'right', y: 'bottom' },
+      }));
+      return;
+    }
+
+    try {
+      await addToCart({ product });
+      dispatch(openAlert({
+        open: true,
+        closeable: true,
+        severity: 'success',
+        message: 'Item added to cart successfully!',
+        anchor: { x: 'right', y: 'bottom' },
+      }));
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      dispatch(openAlert({
+        open: true,
+        closeable: true,
+        severity: 'error',
+        message: 'Failed to add item to cart',
+        anchor: { x: 'right', y: 'bottom' },
+      }));
+    }
+  };
 
   return (
     <motion.div
@@ -57,7 +99,7 @@ const Home = () => {
       ) : error || !products ? (
         <div className="text-center text-red-500 mt-10 font-primary">
           <h2 className="text-2xl font-semibold mb-2">Products Not Found</h2>
-          <p className="text-neutral-500">Sorry, we couldn’t find the products you were looking for.</p>
+          <p className="text-neutral-500">Sorry, we couldn't find the products you were looking for.</p>
         </div>
       ) : (
         <>
@@ -122,13 +164,11 @@ const Home = () => {
                     </p>
                     <hr className="mt-auto mb-2 border-t border-gray-300" />
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/cart');
-                      }}
-                      className="btn-secondary"
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled={isAddingToCart}
+                      className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Add To Cart
+                      {isAddingToCart ? 'Adding...' : 'Add To Cart'}
                     </button>
                   </div>
                 </div>

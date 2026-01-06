@@ -75,6 +75,7 @@ export const useCart = ({ userId }: UseCartParams) => {
         const newTotal = newSubtotal + newTax + newShipping;
 
         const updateData: UpdateOrderDto = {
+          order_user_id: userId,
           order_item_count: newItemCount,
           order_items: updatedItems,
           order_item_subtotal: Number(newSubtotal.toFixed(2)),
