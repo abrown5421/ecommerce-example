@@ -47,6 +47,13 @@ const NavbarDrawer: React.FC = () => {
           <div className="my-4 h-px w-full bg-neutral-contrast/10" />
           <Link
             onClick={closeOnClick}
+            className={classString("/cart")}
+            to="/cart"
+          >
+            Cart
+          </Link>
+          <Link
+            onClick={closeOnClick}
             className={classString("/profile")}
             to="/profile"
           >

@@ -12,7 +12,9 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const isAuth = location.pathname === "/auth";
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const { data: userOrder } = useGetPendingOrderQuery(user?._id!);
+  const { data: userOrder } = useGetPendingOrderQuery(user?._id!, {
+    skip: !user?._id,
+  });
 
   const getGreeting = () => {
     const hour = new Date().getHours();

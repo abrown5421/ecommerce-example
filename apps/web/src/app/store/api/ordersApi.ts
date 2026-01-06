@@ -29,7 +29,10 @@ export const ordersApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: [{ type: "Order", id: "LIST" }],
+      invalidatesTags: (result, error, arg) => [
+        { type: "Order", id: "LIST" },
+        { type: "Order", id: `pending-${arg.order_user_id}` },
+      ],
     }),
 
     updateOrder: builder.mutation<IOrder, { id: string; data: UpdateOrderDto }>(
@@ -39,9 +42,10 @@ export const ordersApi = baseApi.injectEndpoints({
           method: "PUT",
           body: data,
         }),
-        invalidatesTags: (result, error, { id }) => [
+        invalidatesTags: (result, error, { id, data }) => [
           { type: "Order", id },
           { type: "Order", id: "LIST" },
+          ...(data.order_user_id ? [{ type: "Order" as const, id: `pending-${data.order_user_id}` }] : []),
         ],
       },
     ),
