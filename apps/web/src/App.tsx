@@ -13,6 +13,7 @@ import Footer from "./features/footer/Footer";
 import Loader from "./features/loader/Loader";
 import Product from "./pages/product/Product";
 import Cart from "./pages/cart/Cart";
+import PageNotFound from "./pages/pageNotFound/PageNotFound";
 const App: React.FC = () => {
   const location = useLocation();
   const { isLoading } = useGetCurrentUserQuery();
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             {/* new routes inserted here */}
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </AnimatePresence>
         <Alert />
