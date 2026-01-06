@@ -56,6 +56,22 @@ export const ordersApi = baseApi.injectEndpoints({
         { type: "Order", id: "LIST" },
       ],
     }),
+
+    getPendingOrder: builder.query<IOrder, string>({
+      query: (userId) => `/orders/utils/pending/${userId}`,
+      providesTags: (result, error, userId) => [{ type: "Order", id: `pending-${userId}` }],
+    }),
+
+    getUserOrders: builder.query<IOrder[], string>({
+      query: (userId) => `/orders/utils/user/${userId}`,
+      providesTags: (result, error, userId) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({ type: "Order" as const, id: _id })),
+              { type: "Order", id: `user-${userId}` },
+            ]
+          : [{ type: "Order", id: `user-${userId}` }],
+    }),
   }),
 });
 
@@ -67,4 +83,6 @@ export const {
   useDeleteOrderMutation,
   useLazyGetOrdersQuery,
   useLazyGetOrderByIdQuery,
+  useGetPendingOrderQuery,
+  useGetUserOrdersQuery,
 } = ordersApi;

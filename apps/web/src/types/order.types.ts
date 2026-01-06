@@ -9,6 +9,7 @@ export interface IOrder {
   order_item_total: number;
   order_paid: boolean;
   order_shipped?: boolean;
+  order_status: 'pending' | 'purchased' | 'completed';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,11 +24,12 @@ export interface CreateOrderDto {
   order_item_total: number;
   order_paid: boolean;
   order_shipped?: boolean;
+  order_status?: 'pending' | 'purchased' | 'completed'; 
 }
 
 export interface UpdateOrderDto {
   order_user_id?: string;
-  order_item_count: number;
+  order_item_count?: number;
   order_items?: any[];
   order_item_subtotal?: number;
   order_item_tax?: number;
@@ -35,4 +37,5 @@ export interface UpdateOrderDto {
   order_item_total?: number;
   order_paid?: boolean;
   order_shipped?: boolean;
+  order_status?: 'pending' | 'purchased' | 'completed'; 
 }
