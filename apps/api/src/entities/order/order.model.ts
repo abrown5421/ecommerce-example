@@ -10,6 +10,7 @@ export interface IOrder extends Document {
   order_item_total: number;
   order_paid: boolean;
   order_shipped?: boolean;
+  order_status: 'pending' | 'purchased' | 'completed';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,8 +26,15 @@ const OrderSchema: Schema<IOrder> = new Schema(
     order_item_total: { type: Number, required: true },
     order_paid: { type: Boolean, required: true },
     order_shipped: { type: Boolean },
+    order_status: {
+      type: String,
+      enum: ['pending', 'purchased', 'completed'],
+      default: 'pending', 
+      required: true,
+    },
   },
   { timestamps: true },
 );
+
 
 export const OrderModel = mongoose.model<IOrder>("Order", OrderSchema);
