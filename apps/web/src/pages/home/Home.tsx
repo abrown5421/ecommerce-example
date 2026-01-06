@@ -70,7 +70,7 @@ const Home = () => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
 
             <select
@@ -79,7 +79,7 @@ const Home = () => {
                 setCategory(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full md:w-48 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="w-full md:w-48 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
@@ -93,29 +93,45 @@ const Home = () => {
           ) : (
             <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {paginatedProducts.map(product => (
-                <Link
+                <div
                   key={product._id}
-                  to={`/product/${product._id}`}
-                  className="rounded-md overflow-hidden shadow-xl"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                  className="rounded-md overflow-hidden shadow-xl flex flex-col h-full cursor-pointer"
                 >
                   <img
                     src={product.product_image}
                     alt={product.product_name}
                     className="w-full h-48 object-cover"
                   />
-                  <div className="p-2">
-                    <h3 className="font-semibold text-lg">{product.product_name}</h3>
-                    <p className="text-primary font-bold mb-1">${product.product_price.toFixed(2)}</p>
-                    <p className="text-secondary text-sm mb-1">{product.product_description}</p>
-                    <p className="text-neutral-400 text-xs">{product.product_category}</p>
-                    <button 
-                      onClick={handleAddToCart}
-                      className="mt-5 btn-secondary"
+
+                  <div className="p-2 flex flex-col flex-1">
+                    <h3 className="font-semibold text-lg">
+                      {product.product_name}
+                    </h3>
+
+                    <p className="text-primary font-bold mb-1">
+                      ${product.product_price.toFixed(2)}
+                    </p>
+
+                    <p className="text-secondary text-sm mb-1">
+                      {product.product_description}
+                    </p>
+
+                    <p className="text-neutral-400 text-xs mb-5">
+                      {product.product_category}
+                    </p>
+                    <hr className="mt-auto mb-2 border-t border-gray-300" />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/cart');
+                      }}
+                      className="btn-secondary"
                     >
                       Add To Cart
                     </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}
@@ -125,7 +141,7 @@ const Home = () => {
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded disabled:opacity-50"
+                className="btn-gray"
               >
                 Prev
               </button>
@@ -133,7 +149,7 @@ const Home = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-3 py-1 border rounded ${currentPage === i + 1 ? 'bg-primary text-white' : ''}`}
+                  className={`btn-neutral ${currentPage === i + 1 ? 'bg-primary text-white' : ''}`}
                 >
                   {i + 1}
                 </button>
@@ -141,7 +157,7 @@ const Home = () => {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded disabled:opacity-50"
+                className="btn-gray"
               >
                 Next
               </button>

@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
             }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            className="overflow-hidden ml-4"
           >
             <Link
               className="btn-primary"
