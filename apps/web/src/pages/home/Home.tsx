@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGetProductsQuery } from '../../app/store/api/productsApi';
 import Loader from '../../features/loader/Loader';
 
 const PRODUCTS_PER_PAGE = 20;
 
 const Home = () => {
+  const navigate = useNavigate();
   const { data: products, isLoading, error } = useGetProductsQuery();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -38,6 +39,10 @@ const Home = () => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+  
+  const handleAddToCart = () => {
+    navigate('/cart');
+  }
 
   return (
     <motion.div
@@ -100,9 +105,15 @@ const Home = () => {
                   />
                   <div className="p-2">
                     <h3 className="font-semibold text-lg">{product.product_name}</h3>
-                    <p className="text-yellow-500 font-bold mb-1">${product.product_price.toFixed(2)}</p>
-                    <p className="text-neutral-700 text-sm mb-1">{product.product_description}</p>
-                    <p className="text-neutral-500 text-xs">{product.product_category}</p>
+                    <p className="text-primary font-bold mb-1">${product.product_price.toFixed(2)}</p>
+                    <p className="text-secondary text-sm mb-1">{product.product_description}</p>
+                    <p className="text-neutral-400 text-xs">{product.product_category}</p>
+                    <button 
+                      onClick={handleAddToCart}
+                      className="mt-5 btn-secondary"
+                    >
+                      Add To Cart
+                    </button>
                   </div>
                 </Link>
               ))}
@@ -122,7 +133,7 @@ const Home = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-3 py-1 border rounded ${currentPage === i + 1 ? 'bg-yellow-500 text-white' : ''}`}
+                  className={`px-3 py-1 border rounded ${currentPage === i + 1 ? 'bg-primary text-white' : ''}`}
                 >
                   {i + 1}
                 </button>
