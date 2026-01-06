@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleCartClick = () => {
-    navigate("/cart");
+    ;
   }
 
   const handleClick = () => {
@@ -45,11 +45,8 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="bg-neutral flex flex-row justify-between items-center px-4 nav relative z-10 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
-      <div className="text-xl font-bold font-primary">Ecommerce Shop</div>
+      <div onClick={() => navigate("/")} className="text-xl font-bold font-primary cursor-pointer">Ecommerce Shop</div>
       <div className="hidden lg:flex items-center">
-        <Link className={classString("/")} to="/">
-          Home
-        </Link>
 
         {/* new links inserted here */}
 
@@ -65,7 +62,7 @@ const Navbar: React.FC = () => {
             className="overflow-hidden"
           >
             <Link
-              className="ml-4 px-4 py-2 bg-primary text-primary-contrast rounded-xl inline-block"
+              className="ml-4 px-4 py-2 border-2 bg-primary border-primary text-primary-contrast hover:bg-transparent hover:text-primary rounded-xl inline-block"
               to="/auth"
             >
               Login
@@ -76,14 +73,14 @@ const Navbar: React.FC = () => {
         {isAuthenticated && user && (
           <div className="flex items-center ml-4">
             <div
-              onClick={handleCartClick}
+              onClick={() => navigate("/cart")}
               className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer overflow-hidden text-secondary text-sm font-semibold"
             >
               <ShoppingBagIcon />
             </div>
             <div
               onClick={handleClick}
-              className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer overflow-hidden bg-primary text-primary-contrast text-sm font-semibold"
+              className="w-10 h-10 ml-4 rounded-full flex items-center justify-center cursor-pointer overflow-hidden bg-primary text-primary-contrast text-sm font-semibold"
             >
               {user.profileImage ? (
                 <img

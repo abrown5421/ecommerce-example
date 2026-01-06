@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useGetProductsQuery } from '../../app/store/api/productsApi';
 import Loader from '../../features/loader/Loader';
 
@@ -50,8 +51,8 @@ const Home = () => {
         <Loader />
       ) : error || !products ? (
         <div className="text-center text-red-500 mt-10 font-primary">
-          <h2 className="text-2xl font-semibold mb-2">Product Not Found</h2>
-          <p className="text-neutral-500">Sorry, we couldn’t find the product you are looking for.</p>
+          <h2 className="text-2xl font-semibold mb-2">Products Not Found</h2>
+          <p className="text-neutral-500">Sorry, we couldn’t find the products you were looking for.</p>
         </div>
       ) : (
         <>
@@ -80,27 +81,34 @@ const Home = () => {
               ))}
             </select>
           </div>
+          {paginatedProducts.length === 0 ? (
+            <div className="text-center flex grow justify-center items-center text-neutral-500 font-semibold text-lg">
+              No products match your criteria
+            </div>
+          ) : (
+            <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {paginatedProducts.map(product => (
+                <Link
+                  key={product._id}
+                  to={`/product/${product._id}`}
+                  className="rounded-md overflow-hidden shadow-xl"
+                >
+                  <img
+                    src={product.product_image}
+                    alt={product.product_name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-2">
+                    <h3 className="font-semibold text-lg">{product.product_name}</h3>
+                    <p className="text-yellow-500 font-bold mb-1">${product.product_price.toFixed(2)}</p>
+                    <p className="text-neutral-700 text-sm mb-1">{product.product_description}</p>
+                    <p className="text-neutral-500 text-xs">{product.product_category}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
-          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {paginatedProducts.map(product => (
-              <div
-                key={product._id}
-                className="border rounded-md overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
-              >
-                <img
-                  src={product.product_image}
-                  alt={product.product_name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-2">
-                  <h3 className="font-semibold text-lg">{product.product_name}</h3>
-                  <p className="text-yellow-500 font-bold mb-1">${product.product_price.toFixed(2)}</p>
-                  <p className="text-neutral-700 text-sm mb-1">{product.product_description}</p>
-                  <p className="text-neutral-500 text-xs">{product.product_category}</p>
-                </div>
-              </div>
-            ))}
-          </div>
           {totalPages > 1 && (
             <div className="flex mt-6 space-x-2">
               <button
