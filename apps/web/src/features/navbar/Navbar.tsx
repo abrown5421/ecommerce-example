@@ -4,14 +4,15 @@ import { Bars3Icon, ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "../../app/store/hooks";
 import { openDrawer } from "../drawer/drawerSlice";
 import { motion } from "framer-motion";
+import { useGetPendingOrderQuery } from "../../app/store/api/ordersApi";
 
 const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const isAuth = location.pathname === "/auth";
-
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { data: userOrder } = useGetPendingOrderQuery(user?._id!);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -35,9 +36,6 @@ const Navbar: React.FC = () => {
       }),
     );
   };
-
-  const classString = (path?: string) =>
-    `px-4 transition-all ${location.pathname === path ? "text-primary hover:text-accent" : "hover:text-primary"}`;
 
   return (
     <div className="bg-neutral flex flex-row justify-between items-center px-4 nav relative z-10 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
@@ -70,9 +68,15 @@ const Navbar: React.FC = () => {
           <div className="flex items-center ml-4">
             <div
               onClick={() => navigate("/cart")}
-              className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer overflow-hidden text-secondary text-sm font-semibold"
+              className="relative w-7 h-7 cursor-pointer"
             >
-              <ShoppingBagIcon />
+              <ShoppingBagIcon className="w-full h-full text-secondary" />
+
+              {userOrder?.order_item_count ? (
+                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
+                  {userOrder.order_item_count}
+                </span>
+              ) : null}
             </div>
             <div
               onClick={handleClick}
