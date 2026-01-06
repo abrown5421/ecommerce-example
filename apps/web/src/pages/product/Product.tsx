@@ -48,13 +48,13 @@ const Product = () => {
             <div className="flex flex-row gap-4">
               <button 
                 onClick={handleAddToCart}
-                className="cursor-pointer flex flex-1 justify-center items-center px-4 py-2 border-2 bg-gray-600 text-primary-contrast rounded-xl hover:bg-neutral hover:border-gray-600 hover:text-gray-600 transition-all"
+                className="btn-secondary"
               >
                 Add To Cart
               </button>
               <button 
                 onClick={handleAddToCart}
-                className="cursor-pointer flex flex-1 justify-center items-center px-4 py-2 border-2 bg-primary text-primary-contrast rounded-xl hover:bg-neutral hover:border-primary hover:text-primary transition-all"
+                className="btn-primary"
               >
                 Buy Now
               </button>

@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
             className="overflow-hidden"
           >
             <Link
-              className="ml-4 px-4 py-2 border-2 bg-primary border-primary text-primary-contrast hover:bg-transparent hover:text-primary rounded-xl inline-block"
+              className="btn-primary"
               to="/auth"
             >
               Login
