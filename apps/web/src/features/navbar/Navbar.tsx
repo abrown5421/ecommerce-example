@@ -25,10 +25,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  const handleCartClick = () => {
-    ;
-  }
-
   const handleClick = () => {
     dispatch(
       openDrawer({
