@@ -1,6 +1,7 @@
 export interface IOrder {
   _id: string;
   order_user_id: string;
+  order_item_count: number;
   order_items: any[];
   order_item_subtotal: number;
   order_item_tax: number;
@@ -14,6 +15,7 @@ export interface IOrder {
 
 export interface CreateOrderDto {
   order_user_id: string;
+  order_item_count: number;
   order_items: any[];
   order_item_subtotal: number;
   order_item_tax: number;
@@ -25,6 +27,7 @@ export interface CreateOrderDto {
 
 export interface UpdateOrderDto {
   order_user_id?: string;
+  order_item_count: number;
   order_items?: any[];
   order_item_subtotal?: number;
   order_item_tax?: number;

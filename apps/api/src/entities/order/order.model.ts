@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IOrder extends Document {
   order_user_id: mongoose.Types.ObjectId;
+  order_item_count: number;
   order_items: mongoose.Types.ObjectId[];
   order_item_subtotal: number;
   order_item_tax: number;
@@ -16,6 +17,7 @@ export interface IOrder extends Document {
 const OrderSchema: Schema<IOrder> = new Schema(
   {
     order_user_id: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    order_item_count: { type: Number, required: true },
     order_items: [{ type: Schema.Types.ObjectId, ref: "Product", required: true }],
     order_item_subtotal: { type: Number, required: true },
     order_item_tax: { type: Number, required: true },

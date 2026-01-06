@@ -14,6 +14,7 @@ import Loader from "./features/loader/Loader";
 import Product from "./pages/product/Product";
 import Cart from "./pages/cart/Cart";
 import PageNotFound from "./pages/pageNotFound/PageNotFound";
+import Order from "./pages/order/Order";
 const App: React.FC = () => {
   const location = useLocation();
   const { isLoading } = useGetCurrentUserQuery();
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />{" "}
             {/* new routes inserted here */}
+            <Route path="/order/:id" element={<Order />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="*" element={<PageNotFound />} />
