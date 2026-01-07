@@ -33,6 +33,12 @@ const Order = () => {
         </div>
       ) : (
         <div className="max-w-4xl mx-auto space-y-4">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-neutral-contrast font-primary">My Orders</h1>
+            <p className="text-neutral-contrast mt-1">
+              {myOrders.length} {myOrders.length === 1 ? 'order' : 'orders'}
+            </p>
+          </div>
           {myOrders.map((order) => (
             <div
               key={order._id}
@@ -40,13 +46,13 @@ const Order = () => {
               className="cursor-pointer bg-neutral3 hover:bg-neutral4 transition-colors rounded-lg shadow p-4 flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0"
             >
               <div className="flex flex-col">
-                <span className="text-sm text-neutral">Order Number</span>
+                <span className="text-neutral text-xl">Order Number</span>
                 <div className="my-2 h-px w-full bg-neutral" />
                 <span className="font-semibold text-neutral-contrast">{order._id}</span>
               </div>
 
               <div className="flex flex-col">
-                <span className="text-sm text-neutral">Status</span>
+                <span className="text-neutral text-xl">Status</span>
                 <div className="my-2 h-px w-full bg-neutral" />
                 <span
                   className={`px-2 py-1 rounded text-sm font-semibold ${
@@ -60,7 +66,7 @@ const Order = () => {
               </div>
 
               <div className="flex flex-col">
-                <span className="text-sm text-neutral">Placed On</span>
+                <span className="text-neutral text-xl">Placed On</span>
                 <div className="my-2 h-px w-full bg-neutral" />
                 <span className="font-semibold text-neutral-contrast">
                   {new Date(order.createdAt).toLocaleDateString()}
@@ -68,7 +74,7 @@ const Order = () => {
               </div>
 
               <div className="flex flex-col">
-                <span className="text-sm text-neutral">Total</span>
+                <span className="text-neutral text-xl">Total</span>
                 <div className="my-2 h-px w-full bg-neutral" />
                 <span className="font-semibold text-neutral-contrast">
                   ${order.order_item_total.toFixed(2)}
