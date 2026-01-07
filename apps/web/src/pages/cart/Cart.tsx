@@ -167,6 +167,7 @@ const Cart = () => {
                     <button
                       className="mt-6 btn-primary"
                       disabled={orderData.order_items.length === 0}
+                      onClick={() => navigate('/checkout')}
                     >
                       Proceed to Checkout
                     </button>
