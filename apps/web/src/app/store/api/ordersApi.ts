@@ -76,6 +76,39 @@ export const ordersApi = baseApi.injectEndpoints({
             ]
           : [{ type: "Order", id: `user-${userId}` }],
     }),
+
+    addItemToOrder: builder.mutation<IOrder, { orderId: string; productId: string; productPrice: number }>({
+      query: ({ orderId, productId, productPrice }) => ({
+        url: `/orders/utils/${orderId}/add-item`,
+        method: "POST",
+        body: { productId, productPrice },
+      }),
+      invalidatesTags: (result, error, { orderId, productId, productPrice }) => [
+        { type: 'Order', id: `pending-${result?.order_user_id}` }, 
+      ],
+    }),
+
+    decrementItemInOrder: builder.mutation<IOrder, { orderId: string; productId: string; productPrice: number }>({
+      query: ({ orderId, productId, productPrice }) => ({
+        url: `/orders/utils/${orderId}/remove-item`,
+        method: "POST",
+        body: { productId, productPrice },
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: 'Order', id: `pending-${result?.order_user_id}` }, 
+      ],
+    }),
+
+    removeAllOfItemFromOrder: builder.mutation<IOrder, { orderId: string; productId: string; productPrice: number }>({
+      query: ({ orderId, productId, productPrice }) => ({
+        url: `/orders/utils/${orderId}/remove-all/${productId}`,
+        method: "DELETE",
+        body: { productPrice },
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: 'Order', id: `pending-${result?.order_user_id}` }, 
+      ],
+    }),
   }),
 });
 
@@ -89,4 +122,7 @@ export const {
   useLazyGetOrderByIdQuery,
   useGetPendingOrderQuery,
   useGetUserOrdersQuery,
+  useAddItemToOrderMutation,
+  useDecrementItemInOrderMutation,
+  useRemoveAllOfItemFromOrderMutation,
 } = ordersApi;
