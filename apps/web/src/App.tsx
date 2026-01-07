@@ -7,7 +7,6 @@ import Navbar from "./features/navbar/Navbar";
 import Alert from "./features/alert/Alert";
 import Drawer from "./features/drawer/Drawer";
 import { useGetCurrentUserQuery } from "./app/store/api/authApi";
-import Profile from "./pages/profile/Profile";
 import Modal from "./features/modal/Modal";
 import Footer from "./features/footer/Footer";
 import Loader from "./features/loader/Loader";
@@ -36,8 +35,7 @@ const App: React.FC = () => {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/profile" element={<Profile />} />{" "}
+            <Route path="/auth" element={<Auth />} />{" "}
             {/* new routes inserted here */}
             <Route path="/order-complete/:id" element={<OrderComplete />} />
             <Route path="/checkout" element={<Checkout />} />

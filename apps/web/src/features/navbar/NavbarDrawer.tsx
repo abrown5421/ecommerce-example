@@ -54,10 +54,10 @@ const NavbarDrawer: React.FC = () => {
           </Link>
           <Link
             onClick={closeOnClick}
-            className={classString("/profile")}
-            to="/profile"
+            className={classString("/orders")}
+            to="/orders"
           >
-            Profile
+            My Orders
           </Link>
           <Link
             onClick={handleLogout}
