@@ -6,6 +6,7 @@ import { useLazyGetProductByIdQuery } from '../../app/store/api/productsApi';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CartItem from './CartItem';
+import OrderSummary from '../../features/orderSummary/OrderSummary';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -129,60 +130,10 @@ const Cart = () => {
             </div>
 
             {groupedItems.length > 0 && (
-              <div className="lg:col-span-1">
-                <div className="sticky top-4">
-                  <div className="bg-neutral3 rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-white font-primary mb-4">
-                      Order Summary:
-                    </h2>
-                    
-                    <div className="space-y-3 text-neutral-contrast">
-                      <div className="flex justify-between">
-                        <span>Subtotal</span>
-                        <span className='font-sans'>${orderData.order_item_subtotal.toFixed(2)}</span>
-                      </div>
-                      
-                      <div className="flex justify-between">
-                        <span>Shipping</span>
-                        <span className='font-sans'>${orderData.order_item_shipping.toFixed(2)}</span>
-                      </div>
-                      
-                      <div className="flex justify-between">
-                        <span>Tax</span>
-                        <span className='font-sans'>${orderData.order_item_tax.toFixed(2)}</span>
-                      </div>
-                      
-                      <div className="border-t border-neutral-700 pt-3 mt-3">
-                        <div className="flex justify-between text-lg font-semibold text-white">
-                          <span>Total</span>
-                          <span className='font-sans'>${orderData.order_item_total.toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 text-xs text-neutral-contrast text-center">
-                      Status: <span className="capitalize">{orderData.order_status}</span>
-                    </div>
-
-                    <button
-                      className="mt-6 btn-primary"
-                      disabled={orderData.order_items.length === 0}
-                      onClick={() => navigate('/checkout')}
-                    >
-                      Proceed to Checkout
-                    </button>
-                  </div>
-
-                  <div className="text-center mt-4">
-                    <button
-                      onClick={() => navigate("/")}
-                      className="text-primary hover:underline text-sm cursor-pointer"
-                    >
-                      Continue Shopping
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <OrderSummary 
+                orderData={orderData} 
+                mode="cart"
+              />
             )}
           </div>
         </div>
