@@ -39,7 +39,7 @@ const App: React.FC = () => {
             {/* new routes inserted here */}
             <Route path="/order-complete/:id" element={<OrderComplete />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order/:id" element={<Order />} />
+            <Route path="/orders" element={<Order />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="*" element={<PageNotFound />} />
