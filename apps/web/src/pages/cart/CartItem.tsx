@@ -43,7 +43,7 @@ const CartItem = ({ productId, quantity, onRemove, onIncrement, onDecrement }: C
       />
       
       <div className="flex-1">
-        <h3 className="font-primary text-lg font-semibold text-white">
+        <h3 className="font-primary text-lg font-semibold text-neutral">
           {product.product_name}
         </h3>
         <p className="text-sm text-neutral-contrast">{product.product_category}</p>
@@ -71,7 +71,7 @@ const CartItem = ({ productId, quantity, onRemove, onIncrement, onDecrement }: C
             )}
           </button>
 
-          <span className="text-white font-semibold min-w-[2ch] text-center">
+          <span className="text-neutral font-semibold min-w-[2ch] text-center">
             {quantity}
           </span>
 

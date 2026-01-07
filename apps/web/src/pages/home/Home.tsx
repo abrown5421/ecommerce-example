@@ -138,7 +138,7 @@ const Home = () => {
                 <div
                   key={product._id}
                   onClick={() => navigate(`/product/${product._id}`)}
-                  className="rounded-md overflow-hidden shadow-xl flex flex-col h-full cursor-pointer"
+                  className="rounded-md overflow-hidden shadow-xl flex flex-col h-full cursor-pointer bg-white"
                 >
                   <img
                     src={product.product_image}
@@ -189,7 +189,7 @@ const Home = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`btn-neutral ${currentPage === i + 1 ? 'bg-primary text-white' : ''}`}
+                  className={`btn-neutral ${currentPage === i + 1 ? 'bg-primary text-neutral' : ''}`}
                 >
                   {i + 1}
                 </button>

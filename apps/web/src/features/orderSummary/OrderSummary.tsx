@@ -40,7 +40,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     <div className="lg:col-span-1">
       <div className="sticky top-4">
         <div className="bg-neutral3 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-white font-primary mb-4">
+          <h2 className="text-xl font-semibold text-neutral font-primary mb-4">
             Order Summary:
           </h2>
           
@@ -61,7 +61,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </div>
             
             <div className="border-t border-neutral-700 pt-3 mt-3">
-              <div className="flex justify-between text-lg font-semibold text-white">
+              <div className="flex justify-between text-lg font-semibold text-neutral">
                 <span>Total</span>
                 <span className='font-sans'>${orderData.order_item_total.toFixed(2)}</span>
               </div>
