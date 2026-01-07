@@ -52,11 +52,11 @@ const CartItem = ({ productId, quantity, onRemove, onIncrement, onDecrement }: C
           {product.product_name}
         </h3>
         <p className="text-sm text-neutral-contrast">{product.product_category}</p>
-        <p className="text-lg font-semibold text-primary mt-1">
+        <p className="text-lg font-sans font-semibold text-primary mt-1">
           ${product.product_price.toFixed(2)} {quantity > 1 && <span className="text-sm text-neutral-contrast">× {quantity}</span>}
         </p>
         {quantity > 1 && (
-          <p className="text-sm text-neutral-contrast mt-1">
+          <p className="text-sm font-sans text-neutral-contrast mt-1">
             Item total: ${itemTotal.toFixed(2)}
           </p>
         )}
@@ -65,17 +65,21 @@ const CartItem = ({ productId, quantity, onRemove, onIncrement, onDecrement }: C
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 bg-neutral2 rounded-lg p-1">
           <button
-            onClick={() => onDecrement(productId)}
+            onClick={() => quantity > 1 ? onDecrement(productId) : onRemove(productId)}
             className="p-1.5 hover:bg-neutral3 rounded transition-colors"
-            aria-label="Decrease quantity"
+            aria-label={quantity > 1 ? "Decrease quantity" : "Remove item"}
           >
-            <MinusIcon className="w-4 h-4 text-neutral-contrast" />
+            {quantity > 1 ? (
+              <MinusIcon className="w-4 h-4 text-neutral-contrast" />
+            ) : (
+              <TrashIcon className="w-4 h-4 text-red-500" />
+            )}
           </button>
-          
+
           <span className="text-white font-semibold min-w-[2ch] text-center">
             {quantity}
           </span>
-          
+
           <button
             onClick={() => onIncrement(productId)}
             className="p-1.5 hover:bg-neutral3 rounded transition-colors"
@@ -84,13 +88,6 @@ const CartItem = ({ productId, quantity, onRemove, onIncrement, onDecrement }: C
             <PlusIcon className="w-4 h-4 text-neutral-contrast" />
           </button>
         </div>
-
-        <button
-          onClick={() => onRemove(productId)}
-          aria-label="Remove item"
-        >
-          <TrashIcon className="w-6 h-6 text-neutral-contrast hover:text-red-500 cursor-pointer transition-all"/>
-        </button>
       </div>
     </motion.div>
   );
@@ -173,59 +170,62 @@ const Cart = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-neutral3 rounded-lg p-6 sticky top-4">
-                <h2 className="text-xl font-semibold text-white font-primary mb-4">
-                  Order Summary:
-                </h2>
-                
-                <div className="space-y-3 text-neutral-contrast">
-                  <div className="flex justify-between">
-                    <span>Subtotal</span>
-                    <span>${orderData.order_item_subtotal.toFixed(2)}</span>
-                  </div>
+              <div className="sticky top-4">
+                <div className="bg-neutral3 rounded-lg p-6 ">
+                  <h2 className="text-xl font-semibold text-white font-primary mb-4">
+                    Order Summary:
+                  </h2>
                   
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span>${orderData.order_item_shipping.toFixed(2)}</span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span>Tax</span>
-                    <span>${orderData.order_item_tax.toFixed(2)}</span>
-                  </div>
-                  
-                  <div className="border-t border-neutral-700 pt-3 mt-3">
-                    <div className="flex justify-between text-lg font-semibold text-white">
-                      <span>Total</span>
-                      <span>${orderData.order_item_total.toFixed(2)}</span>
+                  <div className="space-y-3 text-neutral-contrast">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span className='font-sans'>${orderData.order_item_subtotal.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span>Shipping</span>
+                      <span className='font-sans'>${orderData.order_item_shipping.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <span>Tax</span>
+                      <span className='font-sans'>${orderData.order_item_tax.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="border-t border-neutral-700 pt-3 mt-3">
+                      <div className="flex justify-between text-lg font-semibold text-white">
+                        <span>Total</span>
+                        <span className='font-sans'>${orderData.order_item_total.toFixed(2)}</span>
+                      </div>
                     </div>
                   </div>
+
+                  <div className="mt-4 text-xs text-neutral-contrast text-center">
+                    Status: <span className="capitalize">{orderData.order_status}</span>
+                  </div>
+
+                  <button
+                    className="mt-6 btn-primary"
+                    disabled={orderData.order_items.length === 0}
+                  >
+                    Proceed to Checkout
+                  </button>
+
                 </div>
-
-                <div className="mt-4 text-xs text-neutral-contrast text-center">
-                  Status: <span className="capitalize">{orderData.order_status}</span>
+                
+                <div className="text-center mt-4">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="text-primary hover:underline text-sm cursor-pointer"
+                  >
+                    Continue Shopping
+                  </button>
                 </div>
-
-                <button
-                  className="mt-6 btn-primary"
-                  disabled={orderData.order_items.length === 0}
-                >
-                  Proceed to Checkout
-                </button>
-
               </div>
             </div>
           </div>
         </div>
       )}
-      <div className="text-center mt-4">
-        <button
-          onClick={() => navigate("/")}
-          className="text-primary hover:underline text-sm cursor-pointer"
-        >
-          Continue Shopping
-        </button>
-      </div>
     </motion.div>
   );
 };
