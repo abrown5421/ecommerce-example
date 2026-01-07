@@ -165,7 +165,7 @@ const Auth = () => {
                 placeholder="Email"
                 value={form.email}
                 onChange={(e) => handleChange('email', e.target.value)}
-                className={`p-2 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-400`}
+                className={`p-2 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary`}
               />
               {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email}</span>}
             </div>
@@ -177,7 +177,7 @@ const Auth = () => {
                   placeholder="First Name"
                   value={form.firstName}
                   onChange={(e) => handleChange('firstName', e.target.value)}
-                  className={`p-2 rounded border ${errors.firstName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-400`}
+                  className={`p-2 rounded border ${errors.firstName ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary`}
                 />
                 {errors.firstName && <span className="text-red-500 text-sm mt-1">{errors.firstName}</span>}
               </div>
@@ -190,7 +190,7 @@ const Auth = () => {
                   placeholder="Last Name (Optional)"
                   value={form.lastName}
                   onChange={(e) => handleChange('lastName', e.target.value)}
-                  className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
             )}
@@ -201,7 +201,7 @@ const Auth = () => {
                 placeholder="Password"
                 value={form.password}
                 onChange={(e) => handleChange('password', e.target.value)}
-                className={`p-2 rounded border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10`}
+                className={`p-2 rounded border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary pr-10`}
               />
               <div
                 className="absolute right-2 top-2 cursor-pointer w-6 h-6 text-gray-600"
@@ -219,7 +219,7 @@ const Auth = () => {
                   placeholder="Confirm Password"
                   value={form.confirmPassword}
                   onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                  className={`p-2 rounded border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10`}
+                  className={`p-2 rounded border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary pr-10`}
                 />
                 <div
                   className="absolute right-2 top-2 cursor-pointer w-6 h-6 text-gray-600"
