@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../app/store/hooks";
 import { useEffect, useState } from "react";
 import { Address } from "../../types/user.types";
 import { openAlert } from "../../features/alert/alertSlice";
-import { useGetPendingOrderQuery } from "../../app/store/api/ordersApi";
+import { useGetPendingOrderQuery, useUpdateOrderMutation } from "../../app/store/api/ordersApi";
 import Loader from "../../features/loader/Loader";
 import { useNavigate } from "react-router-dom";
 import OrderSummary from "../../features/orderSummary/OrderSummary";
+import { useUpdateUserMutation } from "../../app/store/api/usersApi";
 
 interface CheckoutFormState {
   firstName: string;
@@ -113,6 +114,8 @@ const Checkout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  const [ updateOrder, { isLoading: isOrderLoading, error: isOrderError }] = useUpdateOrderMutation();
+  const [ updateUser, { isLoading: isUserLoading, error: isUserError } ] = useUpdateUserMutation();
   const {
     data: orderData,
     isLoading,
@@ -145,6 +148,8 @@ const Checkout = () => {
     }
     return addrErrors;
   };
+
+  useEffect(()=>{console.log(orderData)}, [orderData])
 
   const validate = () => {
     let valid = true;
@@ -290,10 +295,44 @@ const Checkout = () => {
     setErrors((prev) => ({ ...prev }));
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async(e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!validate()) return;
-    console.log("order placed!");
+    if (!validate() || !orderData || !user) return;
+    try {
+      await updateUser({
+        id: user?._id,
+        data: { mailingAddress: form.mailingAddress, billingAddress: form.billingAddress } 
+      }).unwrap(); 
+    } catch (err) {
+      dispatch(
+        openAlert({
+          open: true,
+          closeable: true,
+          severity: "error",
+          message: "There was a problem submitting your request. Please try again later.",
+          anchor: { x: "right", y: "bottom" },
+        })
+      );
+    }
+
+    try {
+      await updateOrder({
+        id: orderData?._id,
+        data: { order_status: 'purchased', order_paid: true }
+      }).unwrap(); 
+      navigate(`/order-complete/${orderData?._id}`)
+    } catch (err) {
+      dispatch(
+        openAlert({
+          open: true,
+          closeable: true,
+          severity: "error",
+          message: "There was a problem submitting your request. Please try again later.",
+          anchor: { x: "right", y: "bottom" },
+        })
+      );
+    }
+    
   };
 
   useEffect(() => {
@@ -330,7 +369,7 @@ const Checkout = () => {
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-neutral3 rounded-lg p-6 space-y-4">
-                <h2 className="text-xl font-semibold text-white font-primary">
+                <h2 className="text-xl font-semibold text-neutral font-primary">
                   Customer Information
                 </h2>
                 <div className="grid md:grid-cols-2 gap-4">
@@ -360,7 +399,7 @@ const Checkout = () => {
               </div>
 
               <div className="bg-neutral3 rounded-lg p-6 space-y-4">
-                <h2 className="text-xl font-semibold text-white font-primary">
+                <h2 className="text-xl font-semibold text-neutral font-primary">
                   Mailing Address
                 </h2>
                 <AddressSection
@@ -394,7 +433,7 @@ const Checkout = () => {
                     className="overflow-hidden"
                   >
                     <div className="bg-neutral3 rounded-lg p-6 space-y-4">
-                      <h2 className="text-xl font-semibold text-white font-primary">
+                      <h2 className="text-xl font-semibold text-neutral font-primary">
                         Billing Address
                       </h2>
                       <AddressSection
@@ -409,7 +448,7 @@ const Checkout = () => {
               </AnimatePresence>
 
               <div className="bg-neutral3 rounded-lg p-6 space-y-4">
-                <h2 className="text-xl font-semibold text-white font-primary">
+                <h2 className="text-xl font-semibold text-neutral font-primary">
                   Payment Information
                 </h2>
                 <div className="grid md:grid-cols-2 gap-4">

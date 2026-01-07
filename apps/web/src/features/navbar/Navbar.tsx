@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
               <ShoppingBagIcon className="w-full h-full text-secondary" />
 
               {userOrder?.order_item_count ? (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
+                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-neutral bg-red-500 rounded-full">
                   {userOrder.order_item_count}
                 </span>
               ) : null}
