@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import { connectDB } from "./db";
 import userRoutes from "./routes/users.routes";
 import authRoutes from "./routes/auth.routes";
@@ -9,7 +8,6 @@ import productRoutes from "./routes/products.routes";
 import orderRoutes from "./routes/orders.routes";
 import cookieParser from "cookie-parser";
 import integrationsRoutes from "./integrations/routes/integrations.routes";
-import { OrderModel } from "./entities/order/order.model";
 
 dotenv.config();
 
@@ -62,41 +60,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/integrations", integrationsRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
-
 const PORT = process.env.PORT || 5000;
 
-// Index cleanup function
-async function cleanupIndexes() {
-  try {
-    const indexes = await OrderModel.collection.getIndexes();
-    console.log('=== Current Order Indexes ===');
-    console.log(JSON.stringify(indexes, null, 2));
-    
-    // Find any index with "Test" in the name
-    const indexNames = Object.keys(indexes);
-    const testIndex = indexNames.find(name => name.toLowerCase().includes('test'));
-    
-    if (testIndex) {
-      console.log(`Found problematic index: ${testIndex}`);
-      await OrderModel.collection.dropIndex(testIndex);
-      console.log(`✓ Dropped ${testIndex} index`);
-    } else {
-      console.log('No problematic Test index found');
-    }
-  } catch (error) {
-    console.error('Error cleaning up indexes:', error);
-  }
-}
-
-// Connect to DB and run cleanup
-connectDB().then(async () => {
-  console.log('MongoDB connection established');
-  
-  // Run index cleanup
-  await cleanupIndexes();
-  
+connectDB().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}).catch((error) => {
-  console.error('Failed to connect to MongoDB:', error);
-  process.exit(1);
 });
