@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../../app/store/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Address } from "../../types/user.types";
 import { openAlert } from "../../features/alert/alertSlice";
 import { useGetPendingOrderQuery, useUpdateOrderMutation } from "../../app/store/api/ordersApi";
@@ -16,6 +16,7 @@ interface CheckoutFormState {
   mailingAddress: Address;
   billingAddress: Address;
   sameAddress: boolean;
+  agreementAccepted: boolean;
   payment: {
     cardNumber: string;
     expiry: string;
@@ -29,6 +30,7 @@ type CheckoutErrors = {
   email?: string;
   mailingAddress?: Partial<Record<keyof Address, string>>;
   billingAddress?: Partial<Record<keyof Address, string>>;
+  agreementAccepted?: string;
   payment?: {
     cardNumber?: string;
     expiry?: string;
@@ -52,9 +54,11 @@ const FormInput = ({
   error,
   type = "text",
   className = "",
+  inputRef,
 }: any) => (
   <div className={`flex flex-col ${className}`}>
     <input
+      ref={inputRef}
       type={type}
       name={name}
       value={value}
@@ -113,6 +117,7 @@ const AddressSection = ({ prefix, address, errors, onChange }: any) => (
 const Checkout = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const expiryRef = useRef<HTMLInputElement | null>(null);
   const { user } = useAppSelector((state) => state.auth);
   const [ updateOrder, { isLoading: isOrderLoading, error: isOrderError }] = useUpdateOrderMutation();
   const [ updateUser, { isLoading: isUserLoading, error: isUserError } ] = useUpdateUserMutation();
@@ -129,12 +134,57 @@ const Checkout = () => {
     mailingAddress: emptyAddress,
     billingAddress: emptyAddress,
     sameAddress: true,
+    agreementAccepted: false,
     payment: { cardNumber: "", expiry: "", cvv: "" },
   });
 
+  const formatExpiry = (
+    raw: string,
+    prev: string,
+    input: HTMLInputElement
+  ) => {
+    let digits = raw.replace(/\D/g, "").slice(0, 6);
+
+    if (
+      prev.length === 3 &&
+      digits.length === 2 &&
+      input.selectionStart === 2
+    ) {
+      digits = digits.slice(0, 2);
+    }
+
+    let formatted = digits;
+
+    if (digits.length >= 3) {
+      formatted = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+    }
+
+    requestAnimationFrame(() => {
+      if (!expiryRef.current) return;
+      expiryRef.current.setSelectionRange(
+        formatted.length,
+        formatted.length
+      );
+    });
+
+    return formatted;
+  };
+
   const isNumeric = (value: string) => /^\d+$/.test(value);
-  const isExpiryValid = (value: string) =>
-    /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
+
+  const isExpiryFormatValid = (value: string) =>
+    /^(0[1-9]|1[0-2])\/\d{4}$/.test(value);
+
+  const isExpiryInFuture = (value: string) => {
+    if (!isExpiryFormatValid(value)) return false;
+
+    const [month, year] = value.split("/").map(Number);
+
+    const expiryDate = new Date(year, month, 0, 23, 59, 59);
+    const now = new Date();
+
+    return expiryDate > now;
+  };
 
   const validateAddress = (address: Address) => {
     const addrErrors: any = {};
@@ -148,8 +198,6 @@ const Checkout = () => {
     }
     return addrErrors;
   };
-
-  useEffect(()=>{console.log(orderData)}, [orderData])
 
   const validate = () => {
     let valid = true;
@@ -185,6 +233,12 @@ const Checkout = () => {
       }
     }
 
+    if (!form.agreementAccepted) {
+      newErrors.agreementAccepted =
+        "You must accept this acknowledgment to complete your order";
+      valid = false;
+    }
+
     const paymentValidations = [
       {
         field: "cardNumber",
@@ -195,7 +249,16 @@ const Checkout = () => {
         field: "cardNumber",
         message: "Card number must be numeric",
         validator: () =>
-          form.payment.cardNumber && !isNumeric(form.payment.cardNumber),
+          form.payment.cardNumber &&
+          !isNumeric(form.payment.cardNumber),
+      },
+      {
+        field: "cardNumber",
+        message: "Card number must be between 13 and 19 digits",
+        validator: () => {
+          const len = form.payment.cardNumber.length;
+          return len < 13 || len > 19;
+        },
       },
       {
         field: "expiry",
@@ -204,9 +267,18 @@ const Checkout = () => {
       },
       {
         field: "expiry",
-        message: "Format must be MM/YY",
+        message: "Format must be MM/YYYY",
         validator: () =>
-          form.payment.expiry && !isExpiryValid(form.payment.expiry),
+          form.payment.expiry &&
+          !isExpiryFormatValid(form.payment.expiry),
+      },
+      {
+        field: "expiry",
+        message: "Card is expired",
+        validator: () =>
+          form.payment.expiry &&
+          isExpiryFormatValid(form.payment.expiry) &&
+          !isExpiryInFuture(form.payment.expiry),
       },
       {
         field: "cvv",
@@ -216,10 +288,15 @@ const Checkout = () => {
       {
         field: "cvv",
         message: "CVV must be numeric",
-        validator: () => form.payment.cvv && !isNumeric(form.payment.cvv),
+        validator: () =>
+          form.payment.cvv && !isNumeric(form.payment.cvv),
+      },
+      {
+        field: "cvv",
+        message: "CVV must be at least 3 digits",
+        validator: () => form.payment.cvv.length < 3,
       },
     ];
-
     paymentValidations.forEach(({ field, message, validator }) => {
       if (validator()) {
         newErrors.payment = { ...newErrors.payment, [field]: message };
@@ -264,6 +341,28 @@ const Checkout = () => {
     setForm((prev) => {
       if (name.includes(".")) {
         const [parent, child] = name.split(".");
+
+        if (parent === "payment") {
+          if (child === "expiry") {
+            return {
+              ...prev,
+              payment: {
+                ...prev.payment,
+                expiry: formatExpiry(
+                  value,
+                  prev.payment.expiry,
+                  e.target
+                ),
+              },
+            };
+          }
+
+          return {
+            ...prev,
+            payment: { ...prev.payment, [child]: finalValue },
+          };
+        }
+
         if (parent === "mailingAddress" || parent === "billingAddress") {
           return {
             ...prev,
@@ -273,13 +372,8 @@ const Checkout = () => {
             },
           };
         }
-        if (parent === "payment") {
-          return {
-            ...prev,
-            payment: { ...prev.payment, [child]: finalValue },
-          };
-        }
       }
+
       if (name === "sameAddress") {
         return {
           ...prev,
@@ -289,6 +383,7 @@ const Checkout = () => {
             : prev.billingAddress,
         };
       }
+
       return { ...prev, [name]: finalValue };
     });
 
@@ -464,8 +559,9 @@ const Checkout = () => {
                     name="payment.expiry"
                     value={form.payment.expiry}
                     onChange={handleChange}
-                    placeholder="MM/YY"
+                    placeholder="MM/YYYY"
                     error={errors.payment?.expiry}
+                    inputRef={expiryRef}
                   />
                   <FormInput
                     name="payment.cvv"
@@ -474,6 +570,44 @@ const Checkout = () => {
                     placeholder="CVV"
                     error={errors.payment?.cvv}
                   />
+                </div>
+              </div>
+
+              <div className="lg:col-span-2 space-y-6">
+                <div className="bg-neutral3 rounded-lg p-6 space-y-4">
+                  <h2 className="text-xl font-semibold text-neutral font-primary">
+                    Confirm Order
+                  </h2>
+                  
+
+                  <label className="flex items-start gap-2 text-sm text-neutral-contrast">
+                    <input
+                      type="checkbox"
+                      name="agreementAccepted"
+                      checked={form.agreementAccepted}
+                      onChange={handleChange}
+                      className="mt-1"
+                    />
+                    <div className="flex flex-col">
+                      <span>I understand and agree to the below statement</span>
+                      {errors.agreementAccepted && (
+                        <span className="text-red-500 text-xs">
+                          {errors.agreementAccepted}
+                        </span>
+                      )}
+                    </div>
+                  </label>
+
+                  
+
+                  <p className="text-xs text-gray-500">
+                    By checking this box, you confirm that, to the best of your knowledge,
+                    the information provided above is accurate. You also acknowledge that
+                    this application is for educational purposes only, that no charges will
+                    be made to the payment method entered, and that you will not receive the
+                    item you are “purchasing.”
+                  </p>
+
                 </div>
               </div>
             </div>
