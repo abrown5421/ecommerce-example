@@ -35,20 +35,21 @@ export const ordersApi = baseApi.injectEndpoints({
       ],
     }),
 
-    updateOrder: builder.mutation<IOrder, { id: string; data: UpdateOrderDto }>(
-      {
-        query: ({ id, data }) => ({
-          url: `/orders/${id}`,
-          method: "PUT",
-          body: data,
-        }),
-        invalidatesTags: (result, error, { id, data }) => [
-          { type: "Order", id },
-          { type: "Order", id: "LIST" },
-          ...(data.order_user_id ? [{ type: "Order" as const, id: `pending-${data.order_user_id}` }] : []),
-        ],
-      },
-    ),
+    updateOrder: builder.mutation<
+      IOrder,
+      { id: string; userId: string; data: UpdateOrderDto }
+    >({
+      query: ({ id, data }) => ({
+        url: `/orders/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id, userId }) => [
+        { type: "Order", id },
+        { type: "Order", id: "LIST" },
+        { type: "Order", id: `pending-${userId}` },
+      ],
+    }),
 
     deleteOrder: builder.mutation<void, string>({
       query: (id) => ({

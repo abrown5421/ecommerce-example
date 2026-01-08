@@ -412,9 +412,13 @@ const Checkout = () => {
 
     try {
       await updateOrder({
-        id: orderData?._id,
-        data: { order_status: 'purchased', order_paid: true }
-      }).unwrap(); 
+        id: orderData._id,
+        userId: user._id,
+        data: {
+          order_status: "purchased",
+          order_paid: true,
+        },
+      }).unwrap();
       navigate(`/order-complete/${orderData?._id}`)
     } catch (err) {
       dispatch(

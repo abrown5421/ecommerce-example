@@ -37,7 +37,7 @@ utilRouter.get("/pending/:userId", async (req, res) => {
     });
 
     if (!pendingOrder) {
-      return res.status(404).json({ error: "No pending order found" });
+      return res.json(null);
     }
 
     res.json(pendingOrder);

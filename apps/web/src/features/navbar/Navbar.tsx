@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bars3Icon, ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAppDispatch, useAppSelector } from "../../app/store/hooks";
@@ -15,6 +15,8 @@ const Navbar: React.FC = () => {
   const { data: userOrder } = useGetPendingOrderQuery(user?._id!, {
     skip: !user?._id,
   });
+
+  useEffect(()=>{console.log(userOrder)}, [userOrder])
 
   const getGreeting = () => {
     const hour = new Date().getHours();

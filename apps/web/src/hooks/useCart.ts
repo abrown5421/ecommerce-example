@@ -86,8 +86,10 @@ export const useCart = ({ userId }: UseCartParams) => {
 
         const result = await updateOrder({
           id: pendingOrder._id,
+          userId: userId,
           data: updateData,
         }).unwrap();
+
         return result;
       }
     },
