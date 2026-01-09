@@ -18,11 +18,13 @@ import Checkout from "./pages/checkout/Checkout";
 import OrderComplete from "./pages/orderComplete/OrderComplete";
 import AdminBar from "./features/adminBar/AdminBar";
 import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
+import AdminSidebar from "./features/adminSidebar/AdminSidebar";
 const App: React.FC = () => {
   const location = useLocation();
   const { data: activeUser, isLoading } = useGetCurrentUserQuery();
 
   const canOpen = activeUser?.type === "editor" || activeUser?.type === "admin";
+  const adminRoute = location.pathname.startsWith('/admin')
 
   if (isLoading) {
     return (
@@ -35,23 +37,26 @@ const App: React.FC = () => {
   return (
     <div className="w-screen h-screen bg-neutral-contrast font-secondary relative">
       <AdminBar enabled={canOpen} />
-      {!location.pathname.startsWith('/admin') && (
+      {!adminRoute && (
         <Navbar />
       )}
       <div className="minus-nav">
         <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />} />{" "}
-            {/* new routes inserted here */}
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/order-complete/:id" element={<OrderComplete />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/orders" element={<Order />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:id" element={<Product />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+          <div className={adminRoute ? "flex flex-row" : ""}>
+            {adminRoute && <AdminSidebar />}
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/auth" element={<Auth />} />{" "}
+              {/* new routes inserted here */}
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/order-complete/:id" element={<OrderComplete />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/orders" element={<Order />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/product/:id" element={<Product />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </div>
         </AnimatePresence>
         <Alert />
         <Drawer />
