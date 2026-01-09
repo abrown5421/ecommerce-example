@@ -9,6 +9,7 @@ import { useCart } from '../../hooks/useCart';
 import Loader from '../../features/loader/Loader';
 import { IProduct } from '../../types/product.types';
 import Pagination from '../../features/pagination/Pagination';
+import SearchBar from '../../features/searchBar/SearchBar';
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -105,17 +106,16 @@ const Home = () => {
       ) : (
         <>
           <div className="w-full mb-6 flex flex-col md:flex-row gap-4">
-            <input
-              type="text"
-              placeholder="Search products..."
+            <SearchBar
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
+              onChange={(val) => {
+                setSearch(val);
                 setCurrentPage(1);
               }}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Search products..."
             />
 
+            {/* Category dropdown stays here */}
             <select
               value={category}
               onChange={(e) => {
@@ -124,8 +124,10 @@ const Home = () => {
               }}
               className="w-full md:w-48 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
