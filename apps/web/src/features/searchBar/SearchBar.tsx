@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       value={localValue}
       onChange={handleChange}
       placeholder={placeholder}
-      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      className="w-full p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
     />
   );
 };
