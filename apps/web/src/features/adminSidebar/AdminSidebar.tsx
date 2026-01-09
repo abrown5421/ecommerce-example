@@ -1,102 +1,57 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
-  CubeIcon,
-  ShoppingCartIcon,
   UserIcon,
-  PlusIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline"; 
-
-const sidebarItems = [
-  {
-    title: "Products",
-    options: [
-      { name: "Create New", icon: PlusIcon },
-      { name: "Edit Existing", icon: PencilIcon },
-      { name: "Delete Existing", icon: TrashIcon },
-    ],
-    icon: CubeIcon, 
-  },
-  {
-    title: "Orders",
-    options: [
-      { name: "Create New", icon: PlusIcon },
-      { name: "Edit Existing", icon: PencilIcon },
-      { name: "Delete Existing", icon: TrashIcon },
-    ],
-    icon: ShoppingCartIcon,
-  },
-  {
-    title: "Users",
-    options: [
-      { name: "Create New", icon: PlusIcon },
-      { name: "Edit Existing", icon: PencilIcon },
-      { name: "Delete Existing", icon: TrashIcon },
-    ],
-    icon: UserIcon,
-  },
-];
+  ShoppingBagIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
 
 const AdminSidebar: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const location = useLocation();
 
-  const toggleAccordion = (title: string) => {
-    setOpenAccordion(openAccordion === title ? null : title);
-  };
+  const links = [
+    {
+      title: "Users",
+      url: "/admin-user",
+      icon: <UserIcon className="w-6 h-6 text-primary mr-3" />,
+    },
+    {
+      title: "Products",
+      url: "/admin-product",
+      icon: <ShoppingBagIcon className="w-6 h-6 text-primary mr-3" />,
+    },
+    {
+      title: "Orders",
+      url: "/admin-order",
+      icon: <ClipboardDocumentListIcon className="w-6 h-6 text-primary mr-3" />,
+    },
+  ];
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
-      className="bg-neutral3 sup-min-nav relative z-0 p-4 flex flex-2 flex-col"
+      className="bg-neutral-700 text-white min-h-screen p-4 flex flex-2 flex-col shadow-[2px_0_4px_rgba(0,0,0,0.1)] relative z-100"
     >
-      {sidebarItems.map((item) => {
-        const ParentIcon = item.icon; 
-        return (
-          <div key={item.title} className="mb-2">
-            <button
-              className={`w-full text-left px-2 py-2 hover:bg-white focus:outline-none cursor-pointer transition-all flex items-center group ${openAccordion === item.title && "bg-white"}`}
-              onClick={() => toggleAccordion(item.title)}
+      <nav className="flex flex-col space-y-3">
+        {links.map((link) => {
+          const isActive = location.pathname === link.url;
+          return (
+            <Link
+              key={link.title}
+              to={link.url}
+              className={`flex items-center p-3 rounded-lg transition-colors duration-200 text-lg
+                ${isActive ? "border-2 border-white text-white" : "bg-neutral3 text-neutral-contrast border-2 border-transparent hover:text-white hover:bg-transparent hover:border-white"}`}
             >
-              <ParentIcon className="w-5 h-5 mr-2 text-primary group-hover:text-primary transition-colors" />
-              <span className={`${openAccordion === item.title ? "text-primary" : "text-neutral-contrast" } group-hover:text-primary transition-colors text-xl font-bold`}>
-                {item.title}
-              </span>
-            </button>
-
-            <AnimatePresence>
-              {openAccordion === item.title && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
-                >
-                  {item.options.map((option) => {
-                    const OptionIcon = option.icon;
-                    return (
-                      <button
-                        key={option.name}
-                        className="w-full text-left px-6 py-3 flex items-center cursor-pointer transition-all group bg-white hover:bg-neutral2"
-                      >
-                        <OptionIcon className="w-4 h-4 mr-2 text-primary group-hover:text-primary transition-colors" />
-                        <span className="text-neutral-contrast group-hover:pl-5 transition-all">
-                          {option.name}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      })}
+              {link.icon}
+              <span className="font-medium">{link.title}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </motion.div>
   );
 };
