@@ -19,12 +19,14 @@ import OrderComplete from "./pages/orderComplete/OrderComplete";
 import AdminBar from "./features/adminBar/AdminBar";
 import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
 import AdminSidebar from "./features/adminSidebar/AdminSidebar";
+import AdminProduct from "./pages/adminProduct/AdminProduct";
+import AdminOrder from "./pages/adminOrder/AdminOrder";
 const App: React.FC = () => {
   const location = useLocation();
   const { data: activeUser, isLoading } = useGetCurrentUserQuery();
 
   const canOpen = activeUser?.type === "editor" || activeUser?.type === "admin";
-  const adminRoute = location.pathname.startsWith('/admin')
+  const adminRoute = location.pathname.startsWith("/admin");
 
   if (isLoading) {
     return (
@@ -37,9 +39,7 @@ const App: React.FC = () => {
   return (
     <div className="w-screen h-screen bg-neutral-contrast font-secondary relative">
       <AdminBar enabled={canOpen} />
-      {!adminRoute && (
-        <Navbar />
-      )}
+      {!adminRoute && <Navbar />}
       <div className="minus-nav">
         <AnimatePresence mode="wait">
           <div className={adminRoute ? "flex flex-row" : ""}>
@@ -48,6 +48,8 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />{" "}
               {/* new routes inserted here */}
+              <Route path="/admin-order" element={<AdminOrder />} />
+              <Route path="/admin-product" element={<AdminProduct />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
               <Route path="/order-complete/:id" element={<OrderComplete />} />
               <Route path="/checkout" element={<Checkout />} />
