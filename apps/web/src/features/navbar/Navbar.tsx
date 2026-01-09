@@ -16,8 +16,6 @@ const Navbar: React.FC = () => {
     skip: !user?._id,
   });
 
-  useEffect(()=>{console.log(userOrder)}, [userOrder])
-
   const getGreeting = () => {
     const hour = new Date().getHours();
 
