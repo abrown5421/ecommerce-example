@@ -8,6 +8,7 @@ import { openAlert } from '../../features/alert/alertSlice';
 import { useCart } from '../../hooks/useCart';
 import Loader from '../../features/loader/Loader';
 import { IProduct } from '../../types/product.types';
+import Pagination from '../../features/pagination/Pagination';
 
 const PRODUCTS_PER_PAGE = 20;
 
@@ -177,31 +178,12 @@ const Home = () => {
           )}
 
           {totalPages > 1 && (
-            <div className="flex mt-6 space-x-2">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="btn-gray"
-              >
-                Prev
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => handlePageChange(i + 1)}
-                  className={`btn-neutral ${currentPage === i + 1 ? 'bg-primary text-neutral' : ''}`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="btn-gray"
-              >
-                Next
-              </button>
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              maxVisiblePages={7} 
+            />
           )}
         </>
       )}
