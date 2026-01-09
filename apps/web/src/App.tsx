@@ -21,6 +21,7 @@ import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
 import AdminSidebar from "./features/adminSidebar/AdminSidebar";
 import AdminProduct from "./pages/adminProduct/AdminProduct";
 import AdminOrder from "./pages/adminOrder/AdminOrder";
+import AdminUser from "./pages/adminUser/AdminUser";
 const App: React.FC = () => {
   const location = useLocation();
   const { data: activeUser, isLoading } = useGetCurrentUserQuery();
@@ -48,6 +49,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />{" "}
               {/* new routes inserted here */}
+              <Route path="/admin-user" element={<AdminUser />} />
               <Route path="/admin-order" element={<AdminOrder />} />
               <Route path="/admin-product" element={<AdminProduct />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
