@@ -65,7 +65,7 @@ const App: React.FC = () => {
         <Alert />
         <Drawer />
         <Modal />
-        <Footer />
+        {!adminRoute && <Footer />}
       </div>
     </div>
   );
