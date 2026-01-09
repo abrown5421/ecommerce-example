@@ -1,12 +1,24 @@
 import { motion } from 'framer-motion';
 import { useGetUsersQuery } from '../../app/store/api/usersApi';
-import CollectionEditor from '../../features/collectionEditor/CollectionEditor';
 import Loader from '../../features/loader/Loader';
+import { useParams } from 'react-router-dom';
+import CollectionViewer from '../../features/collection/CollectionViewer';
+import CollectionEditor from '../../features/collection/CollectionEditor';
 
 const AdminUser = () => {
   const { data: users = [], isLoading } = useGetUsersQuery();
+  const { id } = useParams();
+  const isNew = location.pathname.endsWith('/new');
 
   if (isLoading) return <Loader />;
+
+  if (isNew) {
+    return <CollectionEditor mode="create" />;
+  }
+
+  if (id) {
+    return <CollectionEditor mode="edit" id={id} />;
+  }
 
   return (
     <motion.div
@@ -16,7 +28,8 @@ const AdminUser = () => {
       transition={{ duration: 0.3 }}
       className="bg-neutral relative z-0 p-4 flex flex-8"
     >
-      <CollectionEditor
+      <CollectionViewer
+        featureName='user'
         data={users}
         searchKeys={['firstName', 'lastName', 'email']}
         columns={[

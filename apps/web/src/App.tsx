@@ -50,8 +50,14 @@ const App: React.FC = () => {
               <Route path="/auth" element={<Auth />} />{" "}
               {/* new routes inserted here */}
               <Route path="/admin-user" element={<AdminUser />} />
+              <Route path="/admin-user/:id" element={<AdminUser />} />
+              <Route path="/admin-user/new" element={<AdminUser />} />
               <Route path="/admin-order" element={<AdminOrder />} />
+              <Route path="/admin-order/:id" element={<AdminOrder />} />
+              <Route path="/admin-order/new" element={<AdminOrder />} />
               <Route path="/admin-product" element={<AdminProduct />} />
+              <Route path="/admin-product/:id" element={<AdminProduct />} />
+              <Route path="/admin-product/new" element={<AdminProduct />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
               <Route path="/order-complete/:id" element={<OrderComplete />} />
               <Route path="/checkout" element={<Checkout />} />

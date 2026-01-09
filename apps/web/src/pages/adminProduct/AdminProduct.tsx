@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion';
 import { useDeleteProductMutation, useGetProductsQuery } from '../../app/store/api/productsApi';
 import Loader from '../../features/loader/Loader';
-import CollectionEditor from '../../features/collectionEditor/CollectionEditor';
+import CollectionEditor from '../../features/collection/CollectionEditor';
 import { useAppDispatch } from '../../app/store/hooks';
 import { openModal } from '../../features/modal/modalSlice';
 import { IProduct } from '../../types/product.types';
+import { useParams } from 'react-router-dom';
+import CollectionViewer from '../../features/collection/CollectionViewer';
 
 const AdminProduct = () => {
   const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const isNew = location.pathname.endsWith('/new');
   const { data: products = [], isLoading } = useGetProductsQuery();
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -32,6 +36,14 @@ const AdminProduct = () => {
     );
   };
 
+  if (isNew) {
+    return <CollectionEditor mode="create" />;
+  }
+
+  if (id) {
+    return <CollectionEditor mode="edit" id={id} />;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -40,7 +52,8 @@ const AdminProduct = () => {
       transition={{ duration: 0.3 }}
       className="bg-neutral relative z-0 p-4 flex flex-8"
     >
-      <CollectionEditor
+      <CollectionViewer
+        featureName='product'
         data={products}
         searchKeys={['product_name', 'product_category']}
         columns={[

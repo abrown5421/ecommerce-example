@@ -2,8 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import SearchBar from '../searchBar/SearchBar';
 import Pagination from '../pagination/Pagination';
-import { openModal } from '../modal/modalSlice';
-import { useAppDispatch } from '../../app/store/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Column<T> {
   key: keyof T;
@@ -11,7 +10,8 @@ interface Column<T> {
   render?: (item: T) => React.ReactNode;
 }
 
-interface CollectionEditorProps<T> {
+interface CollectionViewerProps<T> {
+  featureName: string;
   data: T[];
   columns: Column<T>[];
   searchKeys: (keyof T)[];
@@ -20,15 +20,16 @@ interface CollectionEditorProps<T> {
   onDelete?: (item: T) => void;
 }
 
-function CollectionEditor<T extends { _id: string }>({
+function CollectionViewer<T extends { _id: string }>({
+  featureName,
   data,
   columns,
   searchKeys,
   itemsPerPage = 10,
   onEdit,
   onDelete,
-}: CollectionEditorProps<T>) {
-  const dispatch = useAppDispatch();
+}: CollectionViewerProps<T>) {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -52,7 +53,16 @@ function CollectionEditor<T extends { _id: string }>({
   
   return (
     <div className="flex flex-col w-full space-y-4">
-      <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search..." />
+      <div className="flex flex-row gap-2">
+        <div className="flex flex-col flex-8">
+          <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search..." />
+        </div>
+        <button className='btn-primary flex-1'
+          onClick={() => navigate(`/admin-${featureName}/new`)}
+        >
+          Add New
+        </button>
+      </div>
       <div className="overflow-x-auto bg-neutral3 rounded-md">
         <table className="w-full text-left">
           <thead className="bg-neutral-700 text-white">
@@ -82,15 +92,15 @@ function CollectionEditor<T extends { _id: string }>({
                   ))}
                   {(onEdit || onDelete) && (
                     <td className="px-4 py-2 flex space-x-2 justify-end">
-                      {onEdit && (
+                      
                         <button
-                          onClick={() => onEdit(item)}
+                          onClick={() => navigate(`/admin-${featureName}/${item._id}`)}
                           className="p-1 text-blue-600 hover:text-blue-800 rounded cursor-pointer"
                           title="Edit"
                         >
                           <PencilIcon className="w-5 h-5" />
                         </button>
-                      )}
+                      
                       {onDelete && (
                         <button
                           onClick={() => onDelete(item)}
@@ -116,4 +126,4 @@ function CollectionEditor<T extends { _id: string }>({
   );
 }
 
-export default CollectionEditor;
+export default CollectionViewer;
