@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="bg-neutral flex flex-row justify-between items-center px-4 nav relative z-10 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
-      <div onClick={() => navigate("/")} className="text-xl font-bold font-primary cursor-pointer">Ecommerce Shop</div>
+      <div onClick={() => navigate("/")} className="text-xl font-bold font-primary cursor-pointer">ecommerce shop</div>
       <div className="hidden lg:flex items-center">
 
         {/* new links inserted here */}
