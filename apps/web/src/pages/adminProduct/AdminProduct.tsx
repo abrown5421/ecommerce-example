@@ -50,7 +50,7 @@ const AdminProduct = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-neutral relative z-0 p-4 flex flex-8"
+      className="bg-neutral relative z-0 p-4 flex flex-8 sup-min-nav "
     >
       <CollectionViewer
         featureName='product'
@@ -58,9 +58,9 @@ const AdminProduct = () => {
         searchKeys={['product_name', 'product_category']}
         columns={[
           { key: 'product_name', label: 'Name' },
-          { key: 'product_category', label: 'Category' },
+          { key: 'product_category', label: 'Category', hideOnSmall: true },
           { key: 'product_price', label: 'Price', render: (p) => `$${p.product_price.toFixed(2)}` },
-          { key: 'createdAt', label: 'Created', render: (p) => new Date(p.createdAt).toLocaleDateString() },
+          { key: 'createdAt', label: 'Created', render: (p) => new Date(p.createdAt).toLocaleDateString(), hideOnSmall: true },
         ]}
         onEdit={(product) => console.log('Edit', product)}
       onDelete={handleDelete}

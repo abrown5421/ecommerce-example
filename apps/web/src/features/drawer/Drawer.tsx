@@ -5,6 +5,7 @@ import { closeDrawer } from './drawerSlice';
 import { AnchorPoint } from './drawerTypes';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import DrawerNavbar from '../navbar/NavbarDrawer';
+import AdminSidebarDrawer from '../adminSidebar/AdminSidebarDrawer';
 
 const drawerVariants = (anchor: AnchorPoint) => {
     switch (anchor) {
@@ -59,6 +60,8 @@ const Drawer: React.FC = () => {
     switch (drawer.drawerContent) {
       case 'navbar':
         return <DrawerNavbar />;
+      case 'sidebar':
+        return <AdminSidebarDrawer />;
       default: 
         return <div>Content not found</div>;
     }

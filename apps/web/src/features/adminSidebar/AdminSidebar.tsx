@@ -5,9 +5,13 @@ import {
   UserIcon,
   ShoppingBagIcon,
   ClipboardDocumentListIcon,
+  EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
+import { useAppDispatch } from "../../app/store/hooks";
+import { openDrawer } from "../drawer/drawerSlice";
 
 const AdminSidebar: React.FC = () => {
+  const dispatch = useAppDispatch();
   const location = useLocation();
 
   const links = [
@@ -28,15 +32,27 @@ const AdminSidebar: React.FC = () => {
     },
   ];
 
+  const handleOpenSidebar = () => {
+    dispatch(
+      openDrawer({
+        open: true,
+        drawerContent: "sidebar",
+        anchor: "left",
+        title: "Ecommerce Admin"
+      }),
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
-      className="bg-neutral-700 text-white sup-min-nav p-4 flex flex-2 flex-col shadow-[2px_0_4px_rgba(0,0,0,0.1)] relative z-100"
+      className="transition-all bg-neutral-700 text-white py-6 md:p-4 flex md:flex-2 md:flex-col shadow-[2px_0_4px_rgba(0,0,0,0.1)] md:relative z-20 absolute sm:left-0 top-1/2 transform"
     >
-      <nav className="flex flex-col space-y-3">
+      <EllipsisVerticalIcon onClick={handleOpenSidebar} className="flex md:hidden w-6 h-6 text-white" />
+      <nav className="hidden md:flex flex-col space-y-3">
         {links.map((link) => {
           const isActive = location.pathname === link.url;
           return (

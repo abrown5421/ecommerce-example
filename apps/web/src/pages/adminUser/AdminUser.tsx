@@ -50,18 +50,18 @@ const AdminUser = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-neutral relative z-0 p-4 flex flex-8"
+      className="bg-neutral relative z-0 p-4 flex flex-8 sup-min-nav "
     >
       <CollectionViewer
         featureName='user'
         data={users}
         searchKeys={['firstName', 'lastName', 'email']}
         columns={[
-          { key: 'firstName', label: 'First Name' },
-          { key: 'lastName', label: 'Last Name' },
+          { key: 'firstName', label: 'First Name', hideOnSmall: true },
+          { key: 'lastName', label: 'Last Name', hideOnSmall: true },
           { key: 'email', label: 'Email' },
           { key: 'type', label: 'Role' },
-          { key: 'createdAt', label: 'Created', render: (u) => new Date(u.createdAt).toLocaleDateString() },
+          { key: 'createdAt', label: 'Created', render: (u) => new Date(u.createdAt).toLocaleDateString(), hideOnSmall: true },
         ]}
         onEdit={(user) => console.log('Edit', user)}
         onDelete={(user) => handleDelete(user)}
