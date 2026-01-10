@@ -4,6 +4,8 @@ import {
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
   AdjustmentsHorizontalIcon,
+  UserIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminAvatarLogout from "./AdminAvatarLogout";
@@ -55,14 +57,32 @@ const AdminBar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
             transition={{ duration: 0.25 }}
             className="fixed bottom-0 left-0 right-0 z-50 bg-neutral-900 text-neutral px-4 py-2 flex items-center justify-between"
           >
-            <button
-              onClick={() => navigate("/admin-dashboard")}
-              className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
-            >
-              <AdjustmentsHorizontalIcon className="h-5 w-5" />
-              Dashboard
-            </button>
+            <div className="flex flex-row gap-3">
+              <button
+                onClick={() => navigate("/admin-dashboard")}
+                className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
+              >
+                <AdjustmentsHorizontalIcon className="h-5 w-5" />
+                Dashboard
+              </button>
+              <button
+                onClick={() => navigate("/admin-product/new")}
+                className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
+              >
+                <ShoppingBagIcon className="h-5 w-5" />
+                New Product
+              </button>
+              <button
+                onClick={() => navigate("/admin-user/new")}
+                className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
+              >
+                <UserIcon className="h-5 w-5" />
+                New User
+              </button>
+              
+            </div>
 
+            
             <button
               onClick={() => setOpen(false)}
               className="p-1 rounded bg-neutral-800 hover:bg-primary"
@@ -82,7 +102,7 @@ const AdminBar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
             onClick={() => setOpen(true)}
             className="fixed bottom-4 right-4 z-50 bg-neutral-800 p-3 rounded-full hover:bg-primary cursor-pointer"
           >
-            <ArrowsPointingOutIcon className="w-6 h-6" />
+            <ArrowsPointingOutIcon className="w-6 h-6 text-white" />
           </motion.button>
         )}
       </AnimatePresence>
