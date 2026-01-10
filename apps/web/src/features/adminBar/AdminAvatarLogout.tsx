@@ -48,7 +48,7 @@ const AdminAvatarLogout = () => {
 
   return (
     <div className="flex items-center gap-3">
-        <span className="text-xs">Welcome back, {activeUser?.firstName}</span>
+        <span className="hidden md:block text-xs">Welcome back, {activeUser?.firstName}</span>
         <div ref={containerRef} className="flex items-center overflow-hidden">
         <motion.div
             animate={{
