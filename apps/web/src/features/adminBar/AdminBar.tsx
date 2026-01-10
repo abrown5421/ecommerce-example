@@ -63,21 +63,24 @@ const AdminBar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
                 className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
               >
                 <AdjustmentsHorizontalIcon className="h-5 w-5" />
-                Dashboard
+                
+                <span className="hidden lg:block">Dashboard</span>
               </button>
               <button
                 onClick={() => navigate("/admin-product/new")}
                 className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
               >
                 <ShoppingBagIcon className="h-5 w-5" />
-                New Product
+                
+                <span className="hidden lg:block">New Product</span>
               </button>
               <button
                 onClick={() => navigate("/admin-user/new")}
                 className="flex items-center gap-2 rounded-md px-4 py-2 bg-neutral-800 hover:bg-primary transition cursor-pointer"
               >
                 <UserIcon className="h-5 w-5" />
-                New User
+                
+                <span className="hidden lg:block">New User</span>
               </button>
               
             </div>

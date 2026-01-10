@@ -50,7 +50,7 @@ const AdminOrder = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-neutral relative z-0 p-4 flex flex-8"
+      className="bg-neutral relative z-0 p-4 flex flex-8 sup-min-nav "
     >
       <CollectionViewer
         featureName='order'
@@ -58,11 +58,11 @@ const AdminOrder = () => {
         searchKeys={['order_user_id', 'order_user_id', 'order_status']}
         columns={[
           { key: '_id', label: 'Order ID' },
-          { key: 'order_user_id', label: 'User ID' },
-          { key: 'order_item_count', label: 'Items' },
-          { key: 'order_item_total', label: 'Total', render: (o) => `$${o.order_item_total.toFixed(2)}` },
+          { key: 'order_user_id', label: 'User ID', hideOnSmall: true },
+          { key: 'order_item_count', label: 'Items', hideOnSmall: true },
+          { key: 'order_item_total', label: 'Total', render: (o) => `$${o.order_item_total.toFixed(2)}`, hideOnSmall: true },
           { key: 'order_status', label: 'Status' },
-          { key: 'createdAt', label: 'Created', render: (o) => new Date(o.createdAt).toLocaleDateString() },
+          { key: 'createdAt', label: 'Created', render: (o) => new Date(o.createdAt).toLocaleDateString(), hideOnSmall: true },
         ]}
         onEdit={(order) => console.log('Edit', order)}
         onDelete={(order) => handleDelete(order)}

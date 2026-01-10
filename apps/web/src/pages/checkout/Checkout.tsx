@@ -64,9 +64,9 @@ const FormInput = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className={`p-2 rounded border ${
+      className={` ${
         error ? "border-red-500" : "border-transparent"
-      } focus:outline-none focus:ring-2 focus:ring-primary bg-neutral`}
+      } input-primary`}
     />
     {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
   </div>
@@ -87,7 +87,7 @@ const AddressSection = ({ prefix, address, errors, onChange }: any) => (
       value={address.addrLine2}
       onChange={onChange}
       placeholder="Address Line 2"
-      className="p-2 md:col-span-2 rounded border border-transparent focus:outline-none focus:ring-2 focus:ring-primary bg-neutral"
+      className="md:col-span-2 input-primary"
     />
     <FormInput
       name={`${prefix}.addrCity`}
@@ -440,7 +440,7 @@ const Checkout = () => {
     }
   }, [form.mailingAddress, form.sameAddress]);
 
-  return (
+    return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -450,11 +450,18 @@ const Checkout = () => {
     >
       {isLoading ? (
         <Loader />
-      ) : error || !orderData ? (
+      ) : error ? (
         <div className="text-center text-red-500 mt-10 font-primary">
           <h2 className="text-2xl font-semibold mb-2">Order Not Found</h2>
           <p className="text-neutral-500">
             Sorry, there was a problem please try again later.
+          </p>
+        </div>
+      ) : !orderData ? (
+        <div className="text-center mt-10 font-primary">
+          <h2 className="text-2xl font-semibold mb-2 text-neutral-contrast">Your Cart is Empty</h2>
+          <p className="text-neutral-500">
+            Add some items to your cart to proceed with checkout.
           </p>
         </div>
       ) : (

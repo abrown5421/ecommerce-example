@@ -115,14 +115,13 @@ const Home = () => {
               placeholder="Search products..."
             />
 
-            {/* Category dropdown stays here */}
             <select
               value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full md:w-48 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full md:w-48 input-primary"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>

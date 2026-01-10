@@ -38,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="btn-gray disabled:opacity-50 disabled:cursor-not-allowed"
+        className="cursor-pointer flex md:w-full justify-center items-center px-4 py-2 border-2 border-transparent bg-gray-500 text-accent-contrast rounded hover:bg-transparent hover:text-gray-500 hover:border-gray-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Prev
       </button>
@@ -47,8 +47,8 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`btn-neutral ${
-            currentPage === page ? 'bg-primary text-neutral' : ''
+          className={`cursor-pointer flex md:w-full justify-center items-center p-2 border-2 border-transparent rounded hover:bg-transparent hover:text-primary hover:border-primary transition-all ${
+            currentPage === page ? 'bg-primary text-neutral' : 'text-primary'
           }`}
         >
           {page}
@@ -58,7 +58,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="btn-gray disabled:opacity-50 disabled:cursor-not-allowed"
+        className="cursor-pointer flex md:w-full justify-center items-center px-4 py-2 border-2 border-transparent bg-gray-500 text-accent-contrast rounded hover:bg-transparent hover:text-gray-500 hover:border-gray-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Next
       </button>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import SearchBar from '../searchBar/SearchBar';
 import Pagination from '../pagination/Pagination';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ interface Column<T> {
   key: keyof T;
   label: string;
   render?: (item: T) => React.ReactNode;
+  hideOnSmall?: boolean;
 }
 
 interface CollectionViewerProps<T> {
@@ -51,6 +52,12 @@ function CollectionViewer<T extends { _id: string }>({
     return filteredData.slice(start, start + itemsPerPage);
   }, [filteredData, currentPage, itemsPerPage]);
   
+  const truncateValue = (value: unknown, maxLength = 20) => {
+    if (value == null) return "";
+    const str = String(value);
+    return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
+  };
+
   return (
     <div className="flex flex-col w-full space-y-4">
       <div className="flex flex-row gap-2">
@@ -61,7 +68,8 @@ function CollectionViewer<T extends { _id: string }>({
           <button className='btn-primary flex-1'
             onClick={() => navigate(`/admin-${featureName}/new`)}
           >
-            Add New
+            <span className="block lg:hidden"><PlusIcon className="w-5 h-5" /></span>
+            <span className="hidden lg:block">Add New</span>
           </button>
         )}
       </div>
@@ -70,7 +78,10 @@ function CollectionViewer<T extends { _id: string }>({
           <thead className="bg-neutral-700 text-white">
             <tr>
               {columns.map((col) => (
-                <th key={String(col.key)} className="px-4 py-2">
+                <th
+                  key={String(col.key)}
+                  className={`px-4 py-2 ${col.hideOnSmall ? 'hidden md:table-cell' : ''}`}
+                >
                   {col.label}
                 </th>
               ))}
@@ -78,45 +89,49 @@ function CollectionViewer<T extends { _id: string }>({
             </tr>
           </thead>
           <tbody>
-            {paginatedData.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center text-gray-500">
-                  No records found.
-                </td>
+            {paginatedData.map((item) => (
+              <tr key={item._id} className="border-b border-neutral-400">
+                {columns.map((col) => (
+                  <td
+                    key={String(col.key)}
+                    className={`px-4 py-2 text-sm md:text-base ${
+                      col.hideOnSmall ? 'hidden md:table-cell' : ''
+                    }`}
+                  >
+                    {col.render ? (
+                      col.render(item)
+                    ) : (
+                      <>
+                        <span className="md:hidden">{truncateValue(item[col.key])}</span>
+                        <span className="hidden md:inline">{item[col.key] != null ? String(item[col.key]) : ''}</span>
+                      </>
+                    )}
+                  </td>
+                ))}
+                {(onEdit || onDelete) && (
+                  <td className="px-4 py-2 flex md:space-x-2 justify-end items-center h-full">
+                    {onEdit && (
+                      <button
+                        onClick={() => navigate(`/admin-${featureName}/${item._id}`)}
+                        className="p-1 text-secondary hover:text-accent rounded cursor-pointer transition-all"
+                        title="Edit"
+                      >
+                        <PencilIcon className="w-5 h-5" />
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button
+                        onClick={() => onDelete(item)}
+                        className="p-1 text-red-600 hover:text-red-800 rounded cursor-pointer transition-all"
+                        title="Delete"
+                      >
+                        <TrashIcon className="w-5 h-5" />
+                      </button>
+                    )}
+                  </td>
+                )}
               </tr>
-            ) : (
-              paginatedData.map((item) => (
-                <tr key={item._id} className="border-b border-neutral-400">
-                  {columns.map((col) => (
-                    <td key={String(col.key)} className="px-4 py-2">
-                      {col.render ? col.render(item) : String(item[col.key])}
-                    </td>
-                  ))}
-                  {(onEdit || onDelete) && (
-                    <td className="px-4 py-2 flex space-x-2 justify-end">
-                      
-                        <button
-                          onClick={() => navigate(`/admin-${featureName}/${item._id}`)}
-                          className="p-1 text-blue-600 hover:text-blue-800 rounded cursor-pointer"
-                          title="Edit"
-                        >
-                          <PencilIcon className="w-5 h-5" />
-                        </button>
-                      
-                      {onDelete && (
-                        <button
-                          onClick={() => onDelete(item)}
-                          className="p-1 text-red-600 hover:text-red-800 rounded cursor-pointer"
-                          title="Delete"
-                        >
-                          <TrashIcon className="w-5 h-5" />
-                        </button>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>
