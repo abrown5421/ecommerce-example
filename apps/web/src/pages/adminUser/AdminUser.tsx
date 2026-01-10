@@ -1,23 +1,47 @@
 import { motion } from 'framer-motion';
-import { useGetUsersQuery } from '../../app/store/api/usersApi';
+import { useDeleteUserMutation, useGetUsersQuery } from '../../app/store/api/usersApi';
 import Loader from '../../features/loader/Loader';
 import { useParams } from 'react-router-dom';
 import CollectionViewer from '../../features/collection/CollectionViewer';
 import CollectionEditor from '../../features/collection/CollectionEditor';
+import { useAppDispatch } from '../../app/store/hooks';
+import { IUser } from '../../types/user.types';
+import { openModal } from '../../features/modal/modalSlice';
 
 const AdminUser = () => {
+  const dispatch = useAppDispatch();
   const { data: users = [], isLoading } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
   const { id } = useParams();
   const isNew = location.pathname.endsWith('/new');
 
   if (isLoading) return <Loader />;
 
+  const handleDelete = (item: IUser) => {
+    dispatch(
+      openModal({
+        modalContent: 'confirm',
+        title: 'Delete User',
+        message: 'This action is permanent and cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        confirmAction: async () => {
+          try {
+            await deleteUser(item._id).unwrap();
+          } catch (err) {
+            console.error('Delete failed', err);
+          }
+        },
+      })
+    );
+  };
+
   if (isNew) {
-    return <CollectionEditor mode="create" />;
+    return <CollectionEditor mode="create" featureType="user" />;
   }
 
   if (id) {
-    return <CollectionEditor mode="edit" id={id} />;
+    return <CollectionEditor mode="edit" id={id} featureType="user" />;
   }
 
   return (
@@ -40,7 +64,7 @@ const AdminUser = () => {
           { key: 'createdAt', label: 'Created', render: (u) => new Date(u.createdAt).toLocaleDateString() },
         ]}
         onEdit={(user) => console.log('Edit', user)}
-        onDelete={(user) => console.log('Delete', user)}
+        onDelete={(user) => handleDelete(user)}
       />
     </motion.div>
   );

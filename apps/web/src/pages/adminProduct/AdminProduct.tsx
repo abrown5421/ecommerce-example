@@ -37,11 +37,11 @@ const AdminProduct = () => {
   };
 
   if (isNew) {
-    return <CollectionEditor mode="create" />;
+    return <CollectionEditor mode="create" featureType="product" />;
   }
 
   if (id) {
-    return <CollectionEditor mode="edit" id={id} />;
+    return <CollectionEditor mode="edit" id={id} featureType="product" />;
   }
 
   return (

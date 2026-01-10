@@ -57,11 +57,13 @@ function CollectionViewer<T extends { _id: string }>({
         <div className="flex flex-col flex-8">
           <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder="Search..." />
         </div>
-        <button className='btn-primary flex-1'
-          onClick={() => navigate(`/admin-${featureName}/new`)}
-        >
-          Add New
-        </button>
+        {featureName !== 'order' && (
+          <button className='btn-primary flex-1'
+            onClick={() => navigate(`/admin-${featureName}/new`)}
+          >
+            Add New
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto bg-neutral3 rounded-md">
         <table className="w-full text-left">
